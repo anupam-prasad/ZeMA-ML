@@ -5,7 +5,7 @@ import keras.backend as kb
 from hyperopt import fmin, hp, STATUS_OK, Trials, space_eval, tpe
 from hyperopt.pyll import scope
 from keras import Sequential
-from keras.layers import Input, Dense, Dropout
+from keras.layers import Input, Dense, Dropout, Flatten
 
 from load_achsemat import load_achsemat as load_axis_data
 
@@ -40,6 +40,7 @@ def generate_model(params):
                                   use_bias=params.get('use_bias', None)))
         generated_model.add(Dropout(rate=params['layers']['layer_{}'.format(n_layer)]['dropout_rate']))
 
+    generated_model.add(Flatten())
 
     return generated_model
 
