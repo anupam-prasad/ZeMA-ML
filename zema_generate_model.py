@@ -10,6 +10,7 @@ from keras.layers import Input, Dense, Dropout, Flatten
 from load_achsemat import load_achsemat as load_axis_data
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+trainData, trainTarget = load_axis_data()
 
 def node_params(n_layers):
     """
@@ -52,8 +53,6 @@ def lossfn_nn(params):
     model.compile(
         optimizer=params['optimizer'], loss="mean_squared_error", metrics=["mse"]
     )
-
-    trainData, trainTarget = load_axis_data()
 
     history = model.fit(trainData, trainTarget, epochs=100, validation_split=.1, verbose=0)
 
