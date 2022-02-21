@@ -41,6 +41,7 @@ def generate_model(params):
         generated_model.add(Dropout(rate=params['layers']['layer_{}'.format(n_layer)]['dropout_rate']))
 
     generated_model.add(Flatten())
+    generated_model.add(Dense(1, activation='relu'))
     
     return generated_model
 
@@ -57,7 +58,7 @@ def lossfn_nn(params):
 
     nneval_out = history.history['loss']
 
-    return {'loss': nneval_out, 'status': STATUS_OK}
+    return {'loss': nneval_out[-1], 'status': STATUS_OK}
 
 
 def generate_search_space(n_layers=6):
