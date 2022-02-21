@@ -5,7 +5,7 @@ import keras.backend as kb
 from hyperopt import fmin, hp, STATUS_OK, Trials, space_eval, tpe
 from hyperopt.pyll import scope
 from keras import Sequential
-from keras.layers import Input, Dense, Lambda, Dropout
+from keras.layers import Input, Dense, Dropout
 
 from load_achsemat import load_achsemat as load_axis_data
 
@@ -84,8 +84,8 @@ if __name__ == "__main__":
     best = fmin(lossfn_nn, space, algo=tpe.suggest, max_evals=100, trials=trials)
     print('best: ', best)
     print(space_eval(space, best))
-    with open('nn_reflectance_dropout_diffactivations' + ".hyperopt", "wb") as f:
+    with open('zema_ml_simple' + ".hyperopt", "wb") as f:
         pickle.dump(trials, f)
 
-    with open('best_parameters.dict', "wb") as f:
+    with open('best_parameters_simple.dict', "wb") as f:
         pickle.dump(space_eval(space, best), f)
