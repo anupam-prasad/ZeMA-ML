@@ -1,7 +1,7 @@
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import pickle
 
-import keras.backend as kb
 from hyperopt import fmin, hp, STATUS_OK, Trials, space_eval, tpe
 from hyperopt.pyll import scope
 from keras import Sequential
@@ -9,7 +9,6 @@ from keras.layers import Input, Dense, Dropout, Flatten
 
 from load_achsemat import load_achsemat as load_axis_data
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 trainData, trainTarget = load_axis_data()
 
 def node_params(n_layers):
