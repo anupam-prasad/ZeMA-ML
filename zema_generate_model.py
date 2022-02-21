@@ -30,7 +30,7 @@ def node_params(n_layers):
 
 def generate_model(params):
     generated_model = Sequential()
-    generated_model.add(Input(shape=(12,)))
+    generated_model.add(Input(shape=(11,2000)))
 
 
     n_layers = len(params['layers'])
@@ -41,7 +41,7 @@ def generate_model(params):
         generated_model.add(Dropout(rate=params['layers']['layer_{}'.format(n_layer)]['dropout_rate']))
 
     generated_model.add(Flatten())
-
+    
     return generated_model
 
 
@@ -87,6 +87,6 @@ if __name__ == "__main__":
     print(space_eval(space, best))
     with open('zema_ml_simple' + ".hyperopt", "wb") as f:
         pickle.dump(trials, f)
-
+   
     with open('best_parameters_simple.dict', "wb") as f:
         pickle.dump(space_eval(space, best), f)
