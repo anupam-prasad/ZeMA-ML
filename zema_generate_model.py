@@ -1,4 +1,5 @@
 import os
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import pickle
 
@@ -6,12 +7,13 @@ from hyperopt import fmin, hp, STATUS_OK, Trials, space_eval, tpe
 from hyperopt.pyll import scope
 from keras import Sequential
 from keras.layers import Input, Dense, Dropout, Flatten
-from keras import backend as K
-K.set_session(K.tf.Session(config=K.tf.ConfigProto(intra_op_parallelism_threads=16, inter_op_parallelism_threads=16)))
+import tensorflow as tf
 
+tf.config.threading.set_inter_op_parallelism_threads(16)
 from load_achsemat import load_achsemat as load_axis_data
 
 trainData, trainTarget = load_axis_data()
+
 
 def node_params(n_layers):
     """
@@ -32,8 +34,7 @@ def node_params(n_layers):
 
 def generate_model(params):
     generated_model = Sequential()
-    generated_model.add(Input(shape=(11,2000)))
-
+    generated_model.add(Input(shape=(11, 2000)))
 
     n_layers = len(params['layers'])
     for n_layer in range(1, n_layers + 1):
@@ -44,7 +45,7 @@ def generate_model(params):
 
     generated_model.add(Flatten())
     generated_model.add(Dense(1, activation='relu'))
-    
+
     return generated_model
 
 
@@ -80,6 +81,7 @@ def generate_search_space(n_layers=6):
 
     return search_space
 
+
 if __name__ == "__main__":
     space = generate_search_space()
     trials = Trials()
@@ -88,6 +90,6 @@ if __name__ == "__main__":
     print(space_eval(space, best))
     with open('zema_ml_simple' + ".hyperopt", "wb") as f:
         pickle.dump(trials, f)
-   
+
     with open('best_parameters_simple.dict', "wb") as f:
         pickle.dump(space_eval(space, best), f)
