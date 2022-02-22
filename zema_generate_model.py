@@ -6,6 +6,8 @@ from hyperopt import fmin, hp, STATUS_OK, Trials, space_eval, tpe
 from hyperopt.pyll import scope
 from keras import Sequential
 from keras.layers import Input, Dense, Dropout, Flatten
+from keras import backend as K
+K.set_session(K.tf.Session(config=K.tf.ConfigProto(intra_op_parallelism_threads=16, inter_op_parallelism_threads=16)))
 
 from load_achsemat import load_achsemat as load_axis_data
 
