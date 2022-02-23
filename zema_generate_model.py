@@ -118,7 +118,7 @@ def save_model(NN_params):
             print('proceeding without scaling')
 
     best_model.fit(trainData, trainTarget, epochs=100, validation_split=0.1, verbose=0)
-    best_model.save("best_model_simple")
+    best_model.save("best_model_simple.h5")
 
 
 if __name__ == "__main__":
