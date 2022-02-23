@@ -10,6 +10,7 @@ from keras import Sequential
 from keras.layers import Input, Dense, Dropout, Flatten
 import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
+from save_model_weights import save_model_weights
 
 tf.config.threading.set_inter_op_parallelism_threads(10)
 from load_achsemat import load_achsemat as load_axis_data
@@ -109,3 +110,5 @@ if __name__ == "__main__":
 
     with open('best_parameters_simple.dict', "wb") as f:
         pickle.dump(space_eval(space, best), f)
+
+    save_model_weights(space_eval(space, best))
