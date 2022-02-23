@@ -1,6 +1,7 @@
+import os
 import pickle
 import sys
-import os
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 from hyperopt import fmin, hp, STATUS_OK, Trials, space_eval, tpe
@@ -14,7 +15,7 @@ tf.config.threading.set_inter_op_parallelism_threads(10)
 from load_achsemat import load_achsemat as load_axis_data
 
 trainData, trainTarget = load_axis_data()
-#scale the individual time-series data
+# scale the individual time-series data
 try:
     arg1 = sys.argv[1]
     print('scaling training data')
@@ -22,6 +23,7 @@ try:
         trainData[:, k, :] = StandardScaler().fit_transform(trainData[:, k, :])
 except IndexError:
     print('proceeding without scaling')
+
 
 def node_params(n_layers):
     """
@@ -35,7 +37,9 @@ def node_params(n_layers):
     for n in range(1, n_layers + 1):
         params['layer_{}'.format(n)] = {
             'n_units': scope.int(hp.quniform('n_nodes_{}_{}'.format(n_layers, n), 100, 1000, 50)),
-            'dropout_rate'.format(n): hp.quniform('dropout_rate_{}_{}'.format(n_layers, n), .0, .75, .05),
+            'dropout': hp.choice('dropout_{}_{}'.format(n_layers, n), [
+                {'choice': False},
+                {'choice': True, 'dropout_rate': hp.quniform('dropout_rate_{}_{}'.format(n_layers, n), .1, .8, .1)}]),
             'activation': hp.choice('activation_{}_{}'.format(n_layers, n), ['relu', 'tanh', None])}
     return params
 
@@ -50,7 +54,10 @@ def generate_model(params):
         generated_model.add(Dense(params['layers']['layer_{}'.format(n_layer)]['n_units'],
                                   activation=params['layers']['layer_{}'.format(n_layer)]['activation'],
                                   use_bias=params.get('use_bias', None)))
-        generated_model.add(Dropout(rate=params['layers']['layer_{}'.format(n_layer)]['dropout_rate']))
+        dropout_choice = params['layers']['layer_{}'.format(n_layer)]['dropout']['choice']
+        dropout_rate = params['layers']['layer_{}'.format(n_layer)]['dropout'].get('dropout_rate', None)
+        if dropout_choice:
+            generated_model.add(Dropout(rate=dropout_rate))
 
     generated_model.add(Flatten())
     generated_model.add(Dense(1, activation='relu'))
