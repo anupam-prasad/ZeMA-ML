@@ -10,7 +10,6 @@ from keras import Sequential
 from keras.layers import Input, Dense, Dropout, Flatten
 import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
-from save_model_weights import save_model_weights
 
 tf.config.threading.set_inter_op_parallelism_threads(10)
 from load_achsemat import load_achsemat as load_axis_data
@@ -98,6 +97,27 @@ def generate_search_space(n_layers=6):
 
     return search_space
 
+def save_model_weights(NN_params):
+    best_model = generate_model(NN_params)
+    print(best_model.summary())
+
+    best_model.compile(
+        optimizer=NN_params['optimizer'], loss="mean_squared_error", metrics=["mse"]
+    )
+
+    if 'trainData' not in globals():
+        trainData, trainTarget = load_axis_data()
+        # scale the individual time-series data
+        try:
+            arg1 = sys.argv[1]
+            print('scaling training data')
+            for k in range(11):
+                trainData[:, k, :] = StandardScaler().fit_transform(trainData[:, k, :])
+        except IndexError:
+            print('proceeding without scaling')
+
+    best_model.fit(trainData, trainTarget, epochs=100, validation_split=0.1, verbose=0)
+    best_model.save_weights("best_model_simple.h5")
 
 if __name__ == "__main__":
     space = generate_search_space()
