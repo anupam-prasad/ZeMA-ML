@@ -105,7 +105,7 @@ def save_model_weights(NN_params):
         optimizer=NN_params['optimizer'], loss="mean_squared_error", metrics=["mse"]
     )
 
-    if 'trainData' not in globals():
+    if 'trainData' not in locals():
         trainData, trainTarget = load_axis_data()
         # scale the individual time-series data
         try:
