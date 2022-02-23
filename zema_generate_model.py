@@ -98,27 +98,24 @@ def generate_search_space(n_layers=6):
     return search_space
 
 
-def save_model(NN_params):
-    best_model = generate_model(NN_params)
+def save_model(nn_params):
+    best_model = generate_model(nn_params)
     print(best_model.summary())
 
     best_model.compile(
-        optimizer=NN_params['optimizer'], loss="mean_squared_error", metrics=["mse"]
+        optimizer=nn_params['optimizer'], loss="mean_squared_error", metrics=["mse"]
     )
 
-    if 'trainData' not in locals():
-        trainData, trainTarget = load_axis_data()
-        # scale the individual time-series data
-        try:
-            arg1 = sys.argv[1]
-            print('scaling training data')
-            for k in range(11):
-                trainData[:, k, :] = StandardScaler().fit_transform(trainData[:, k, :])
-        except IndexError:
-            print('proceeding without scaling')
+    fname = 'best_model_simple'
+    try:
+        arg2 = sys.argv[1]
+        print('scaling training data')
+    except IndexError:
+        fname += '_noscaling'
+        print('proceeding without scaling')
 
     best_model.fit(trainData, trainTarget, epochs=100, validation_split=0.1, verbose=0)
-    best_model.save("best_model_simple_noscaling.h5")
+    best_model.save("best_model_simple_noscaling"+".h5")
 
 
 if __name__ == "__main__":
