@@ -97,7 +97,8 @@ def generate_search_space(n_layers=6):
 
     return search_space
 
-def save_model_weights(NN_params):
+
+def save_model(NN_params):
     best_model = generate_model(NN_params)
     print(best_model.summary())
 
@@ -117,7 +118,8 @@ def save_model_weights(NN_params):
             print('proceeding without scaling')
 
     best_model.fit(trainData, trainTarget, epochs=100, validation_split=0.1, verbose=0)
-    best_model.save_weights("best_model_simple.h5")
+    best_model.save("best_model_simple")
+
 
 if __name__ == "__main__":
     space = generate_search_space()
@@ -131,4 +133,4 @@ if __name__ == "__main__":
     with open('best_parameters_simple.dict', "wb") as f:
         pickle.dump(space_eval(space, best), f)
 
-    save_model_weights(space_eval(space, best))
+    save_model(space_eval(space, best))
