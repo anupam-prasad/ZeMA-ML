@@ -4,12 +4,21 @@ The model weights are saved/serialized in hdf5 format.
 """
 import pickle
 from zema_generate_model import save_model
-
+import sys
 
 
 if __name__ == "__main__":
-    with open('best_parameters_simple.dict', "rb") as f:
-        params = pickle.load(f)
+
+    try:
+        arg1 = sys.argv[1]
+        print('loading model for scaled data')
+        with open('best_parameters_simple.dict', "rb") as f:
+            params = pickle.load(f)
+    except IndexError:
+        print('loading model for unscaled data')
+        with open('best_parameters_simple_noscaling.dict', "rb") as f:
+            params = pickle.load(f)
+
     print(params)
 
     save_model(params)
