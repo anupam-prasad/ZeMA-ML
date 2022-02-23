@@ -1,2 +1,3 @@
 #!/bin/bash
-pwd
+. zema-ml/venv/bin/activate
+python zema-ml/zema_generate_model.py
