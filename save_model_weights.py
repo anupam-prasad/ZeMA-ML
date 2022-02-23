@@ -3,7 +3,7 @@ Loads the best parameters estimated using hyperopt and compiles and fits the mod
 The model weights are saved/serialized in hdf5 format.
 """
 import pickle
-from zema_generate_model import save_model_weights
+from zema_generate_model import save_model
 
 
 
@@ -12,4 +12,4 @@ if __name__ == "__main__":
         params = pickle.load(f)
     print(params)
 
-    save_model_weights(params)
+    save_model(params)
