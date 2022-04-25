@@ -1,6 +1,8 @@
 """
 Loads the best parameters estimated using hyperopt and compiles and fits the model to the training data.
 The model weights are saved/serialized in hdf5 format.
+
+Unless specified, i.e. running the script without any arguments, the parameters for unscaled data are loaded.
 """
 import pickle
 from zema_generate_model import save_model
