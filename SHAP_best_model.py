@@ -39,9 +39,9 @@ model.fit(trainData, trainTarget, epochs=100, validation_split=0, verbose=0)
 
 n_samples = 150
 sampled_data = shap.sample(trainData, n_samples)
-explainer = shap.KernelExplainer(model=model.predict, data=sampled_data, link="identity")
+explainer = shap.DeepExplainer(model=model, data=sampled_data)
 X_idx = 0
-shap_values = explainer.shap_values(X=sampled_data, nsamples=n_samples)
+shap_values = explainer.shap_values(X=sampled_data)
 
 with open('shapley_nn_bestmodel', "wb") as f:
     pickle.dump(shap_values, f)
