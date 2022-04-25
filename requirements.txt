@@ -87,3 +87,5 @@ wrapt==1.13.3
 zipp==3.7.0
 
 hyperopt~=0.2.7
+shap~=0.40.0
+sklearn~=0.0
