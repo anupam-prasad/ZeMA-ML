@@ -5,6 +5,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 import shap
 import tensorflow as tf
+tf.compat.v1.disable_v2_behavior()
 from sklearn.preprocessing import StandardScaler
 
 from zema_generate_model import generate_model
